@@ -29,6 +29,8 @@ services:
     plan: free
     runtime: docker
     region: frankfurt
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /
     
     # Variables d'environnement (configurez ces valeurs dans Render Dashboard)
     envVars:
