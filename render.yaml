@@ -1,0 +1,62 @@
+# ============================================
+# Configuration Render.com pour déploiement Docker
+# ============================================
+#
+# Pour déployer sur Render:
+# 1. Créez un compte sur render.com
+# 2. Connectez votre repository GitHub
+# 3. Créez un nouveau "Web Service"
+# 4. Configurez comme suit:
+#
+# Build Command: (laisser vide - Docker gère tout)
+# Start Command: (laisser vide - Docker gère tout)
+# Environment: Docker
+# Plan: Free ou Paid selon vos besoins
+#
+# Variables d'environnement à configurer:
+# - DATABASE_HOST: votre host MySQL
+# - DATABASE_PORT: 3306
+# - DATABASE_NAME: nom de votre base
+# - DATABASE_USER: utilisateur MySQL
+# - DATABASE_PASSWORD: mot de passe MySQL
+# - PHP_TZ: UTC (ou votre timezone)
+#
+# ============================================
+
+services:
+  - type: web
+    name: taf-app
+    plan: free
+    runtime: docker
+    region: frankfurt
+    
+    # Variables d'environnement (configurez ces valeurs dans Render Dashboard)
+    envVars:
+      - key: DATABASE_HOST
+        fromDatabase:
+          name: taf-db
+          property: host
+      - key: DATABASE_PORT
+        value: "3306"
+      - key: DATABASE_NAME
+        fromDatabase:
+          name: taf-db
+          property: name
+      - key: DATABASE_USER
+        fromDatabase:
+          name: taf-db
+          property: user
+      - key: DATABASE_PASSWORD
+        fromDatabase:
+          name: taf-db
+          property: password
+      - key: PHP_TZ
+        value: "UTC"
+
+databases:
+  - name: taf-db
+    plan: free
+    region: frankfurt
+    databaseName: taf_db
+    user: taf_user
+

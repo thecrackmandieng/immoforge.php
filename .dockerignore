@@ -1,0 +1,51 @@
+# Fichiers et répertoires à exclure de l'image Docker
+
+# Git
+.git
+.gitignore
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Fichiers système
+.DS_Store
+Thumbs.db
+
+# Node.js (si présent)
+node_modules
+npm-debug.log
+yarn-error.log
+
+# Fichiers de test
+tests
+test
+*.test.php
+phpunit.xml
+
+# Documentation
+README.md
+readme.md
+docs/
+*.md
+
+# Fichiers de configuration locaux
+*.local
+*.env
+.env.local
+
+# Cache
+cache/
+tmp/
+temp/
+logs/
+
+# Backup
+*.bak
+*.backup
+
+# VSCode files
+.vscode/
+
