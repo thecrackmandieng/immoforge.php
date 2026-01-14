@@ -31,9 +31,9 @@ RUN sed -i 's/Listen 80/Listen 10000/' /etc/apache2/ports.conf && \
 # ----------------------------
 # DocumentRoot CORRECT (TAF)
 # ----------------------------
-RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/taf-version6.0/taf|g' \
+RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/taf-version6.0/taf/|g' \
     /etc/apache2/sites-available/000-default.conf && \
-    sed -i 's|<Directory /var/www/html>|<Directory /var/www/html/taf-version6.0/taf>|g' \
+    sed -i 's|<Directory /var/www/html>|<Directory /var/www/html/taf-version6.0/taf/>|g' \
     /etc/apache2/sites-available/000-default.conf
 
 # ----------------------------
