@@ -1,5 +1,5 @@
 # ============================================
-# Dockerfile PHP + Apache pour Render (FINAL STABLE)
+# Dockerfile PHP + Apache pour Render (FINAL RÉEL)
 # ============================================
 
 FROM php:8.2-apache
@@ -23,7 +23,7 @@ RUN apt-get update && apt-get install -y \
 RUN echo "date.timezone=UTC" > /usr/local/etc/php/conf.d/timezone.ini
 
 # ----------------------------
-# Apache : port + ServerName
+# Apache : port Render + ServerName
 # ----------------------------
 RUN sed -i 's/Listen 80/Listen 10000/' /etc/apache2/ports.conf && \
     sed -i 's/:80/:10000/' /etc/apache2/sites-available/000-default.conf && \
@@ -35,29 +35,28 @@ RUN sed -i 's/Listen 80/Listen 10000/' /etc/apache2/ports.conf && \
 WORKDIR /var/www/html
 
 # ----------------------------
-# COPY EXPLICITE (CORRIGÉ)
+# COPY CORRECT (racine du repo)
 # ----------------------------
-# On copie uniquement ce qui est nécessaire
-COPY --chown=www-data:www-data taf-version6.0 /var/www/html/taf-version6.0
+COPY --chown=www-data:www-data . /var/www/html
 
 # ----------------------------
-# DocumentRoot TAF (existe maintenant)
+# DocumentRoot RÉEL
 # ----------------------------
-RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/taf-version6.0/taf|g' \
+RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/taf|g' \
     /etc/apache2/sites-available/000-default.conf && \
-    sed -i 's|<Directory /var/www/html>|<Directory /var/www/html/taf-version6.0/taf>|g' \
+    sed -i 's|<Directory /var/www/html>|<Directory /var/www/html/taf>|g' \
     /etc/apache2/sites-available/000-default.conf
 
 # ----------------------------
-# Permissions (sélectives)
+# Permissions nécessaires
 # ----------------------------
 RUN chmod -R 755 /var/www/html && \
     chmod -R 777 \
-        /var/www/html/taf-version6.0/taf/taf_assets \
-        /var/www/html/taf-version6.0/taf/taf_docs \
-        /var/www/html/taf-version6.0/taf/user_documents \
-        /var/www/html/taf-version6.0/taf/bien_images \
-        /var/www/html/taf-version6.0/taf/zones || true
+        /var/www/html/taf_assets \
+        /var/www/html/taf_docs \
+        /var/www/html/user_documents \
+        /var/www/html/bien_images \
+        /var/www/html/zones || true
 
 # ----------------------------
 # Port Render
