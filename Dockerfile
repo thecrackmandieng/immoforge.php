@@ -1,5 +1,5 @@
 # ============================================
-# Dockerfile PHP + Apache pour Render (FINAL)
+# Dockerfile PHP + Apache pour Render (FINAL STABLE)
 # ============================================
 
 FROM php:8.2-apache
@@ -23,18 +23,11 @@ RUN apt-get update && apt-get install -y \
 RUN echo "date.timezone=UTC" > /usr/local/etc/php/conf.d/timezone.ini
 
 # ----------------------------
-# Apache écoute le port Render
+# Apache : port + ServerName
 # ----------------------------
 RUN sed -i 's/Listen 80/Listen 10000/' /etc/apache2/ports.conf && \
-    sed -i 's/:80/:10000/' /etc/apache2/sites-available/000-default.conf
-
-# ----------------------------
-# DocumentRoot CORRECT (TAF)
-# ----------------------------
-RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/taf-version6.0/taf/|g' \
-    /etc/apache2/sites-available/000-default.conf && \
-    sed -i 's|<Directory /var/www/html>|<Directory /var/www/html/taf-version6.0/taf/>|g' \
-    /etc/apache2/sites-available/000-default.conf
+    sed -i 's/:80/:10000/' /etc/apache2/sites-available/000-default.conf && \
+    echo "ServerName localhost" >> /etc/apache2/apache2.conf
 
 # ----------------------------
 # Répertoire de travail
@@ -42,26 +35,34 @@ RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/taf-version6
 WORKDIR /var/www/html
 
 # ----------------------------
-# Copier le projet
+# COPY EXPLICITE (CORRIGÉ)
 # ----------------------------
-COPY --chown=www-data:www-data . /var/www/html/
+# On copie uniquement ce qui est nécessaire
+COPY --chown=www-data:www-data taf-version6.0 /var/www/html/taf-version6.0
+
+# ----------------------------
+# DocumentRoot TAF (existe maintenant)
+# ----------------------------
+RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/taf-version6.0/taf|g' \
+    /etc/apache2/sites-available/000-default.conf && \
+    sed -i 's|<Directory /var/www/html>|<Directory /var/www/html/taf-version6.0/taf>|g' \
+    /etc/apache2/sites-available/000-default.conf
 
 # ----------------------------
 # Permissions (sélectives)
 # ----------------------------
 RUN chmod -R 755 /var/www/html && \
     chmod -R 777 \
-        /var/www/html/taf_assets \
-        /var/www/html/taf_docs \
-        /var/www/html/user_documents \
-        /var/www/html/bien_images \
-        /var/www/html/zones || true
+        /var/www/html/taf-version6.0/taf/taf_assets \
+        /var/www/html/taf-version6.0/taf/taf_docs \
+        /var/www/html/taf-version6.0/taf/user_documents \
+        /var/www/html/taf-version6.0/taf/bien_images \
+        /var/www/html/taf-version6.0/taf/zones || true
 
 # ----------------------------
 # Port Render
 # ----------------------------
 EXPOSE 10000
-
 ENV PORT=10000
 
 # ----------------------------
