@@ -42,9 +42,9 @@ COPY --chown=www-data:www-data . /var/www/html
 # ----------------------------
 # DocumentRoot RÉEL
 # ----------------------------
-RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html/taf|g' \
+RUN sed -i 's|DocumentRoot /var/www/html|DocumentRoot /var/www/html|g' \
     /etc/apache2/sites-available/000-default.conf && \
-    sed -i 's|<Directory /var/www/html>|<Directory /var/www/html/taf>|g' \
+    sed -i 's|<Directory /var/www/html>|<Directory /var/www/html>|g' \
     /etc/apache2/sites-available/000-default.conf
 
 # ----------------------------
